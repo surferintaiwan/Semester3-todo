@@ -1,1 +1,11 @@
-<h2>this is home page</h2>
+<a href="#">Create</a>
+<ul>
+    {{#each todos}}
+    <li>
+        {{this.name}}
+        <a href="#">detail</a>
+        <a href="#">edit</a>
+        <button type="submit">delete</button>
+    </li>
+    {{/each}}
+</ul>
