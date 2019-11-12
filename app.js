@@ -40,8 +40,8 @@ app.get('/', (req, res) => {
 
 // 瀏覽所有todo
 app.get('/todos', (req, res) => {
-    Todo.find((error, todos) => {
-        if (error) return console.error(error)
+    Todo.find((err, todos) => {
+        if (err) return console.error(err)
         console.log(todos)
         return res.render('index', {todos: todos})
     })
@@ -69,7 +69,10 @@ app.get('/todos/new', (req, res) => {
 })
 
 app.get('/todos/:id', (req, res) => {
-    res.send('顯示這個id的todo的詳細資料')
+    
+    Todo.findById(req.params.id,(err,todo) => {
+        return res.render('detail', {todo: todo.name})
+    })
 })
 
 app.post('/todos', (req, res) => {
