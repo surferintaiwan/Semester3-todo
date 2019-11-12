@@ -42,7 +42,6 @@ app.get('/', (req, res) => {
 app.get('/todos', (req, res) => {
     Todo.find((err, todos) => {
         if (err) return console.error(err)
-        console.log(todos)
         return res.render('index', {todos: todos})
     })
 })
@@ -99,8 +98,15 @@ app.post('/todos/:id/edit', (req, res) => {
     })    
 })
 
+// POST刪除todo
 app.post('/todos/:id/delete', (req, res) => {
-    res.send('刪除todo')
+    Todo.findById(req.params.id, (err, todo) => {
+        if (err) return console.error(err)
+        todo.remove(err, ()=> {
+            if (err) return console.error(err)
+            return res.redirect('/todos')
+        })
+    })
 })
 
 
