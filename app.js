@@ -61,17 +61,17 @@ app.post('/todos', (req, res) => {
     */
    Todo.create({name: req.body.name})
    res.redirect('/')
-    
 })
 
+// 顯示進行新增的頁面
 app.get('/todos/new', (req, res) => {
     res.render('new')
 })
 
+// 顯示不同todo的詳細頁面
 app.get('/todos/:id', (req, res) => {
-    
     Todo.findById(req.params.id,(err,todo) => {
-        return res.render('detail', {todo: todo.name})
+        return res.render('detail', {todo: todo})
     })
 })
 
@@ -79,12 +79,24 @@ app.post('/todos', (req, res) => {
     res.send('建立todo')
 })
 
+// 顯示不同todo的編輯頁面
 app.get('/todos/:id/edit', (req, res) => {
-    res.send('取得修改todo的頁面')
+    Todo.findById(req.params.id, (err, todo) => {
+        res.render('edit', {todo: todo})     
+    })
+    
 })
 
+// POST修改todo
 app.post('/todos/:id/edit', (req, res) => {
-    res.send('修改todo')
+    Todo.findById(req.params.id,(err, todo) => {
+        if (err) return console.error(err)
+        todo.name = req.body.name
+        todo.save(err, () => {
+            if (err) return console.error(err)
+            return res.redirect('/todos/' + todo.id)
+        })
+    })    
 })
 
 app.post('/todos/:id/delete', (req, res) => {
