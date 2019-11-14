@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const Todo = require('./models/todo.js')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
-const methodOveride = require('method-override')
+const methodOverride = require('method-override')
 
 
 // 設定handlebars
@@ -34,7 +34,8 @@ db.once('open', () => {
     console.log('mondoDB connnected!')
 })
 
-app.use(methodOverride('X-HTTP-Method-Override'))
+// 設定method-override
+app.use(methodOverride('_method'))
 
 // 路由
 // 透過轉址瀏覽所有todo
@@ -92,7 +93,7 @@ app.get('/todos/:id/edit', (req, res) => {
     
 })
 
-// POST修改todo
+// PUT修改todo
 app.put('/todos/:id', (req, res) => {
     Todo.findById(req.params.id,(err, todo) => {
         if (err) return console.error(err)
@@ -109,8 +110,8 @@ app.put('/todos/:id', (req, res) => {
     })    
 })
 
-// POST刪除todo
-app.delete('/todos/:id/delete', (req, res) => {
+// DELETE刪除todo
+app.delete('/todos/:id', (req, res) => {
     Todo.findById(req.params.id, (err, todo) => {
         if (err) return console.error(err)
         todo.remove(err, ()=> {
