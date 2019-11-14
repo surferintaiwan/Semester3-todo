@@ -5,11 +5,13 @@ const mongoose = require('mongoose')
 const Todo = require('./models/todo.js')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const methodOveride = require('method-override')
 
 
 // 設定handlebars
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
+
 
 // 設定body-parser
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -32,6 +34,8 @@ db.once('open', () => {
     console.log('mondoDB connnected!')
 })
 
+app.use(methodOverride('X-HTTP-Method-Override'))
+
 // 路由
 // 透過轉址瀏覽所有todo
 app.get('/', (req, res) => {
@@ -40,7 +44,9 @@ app.get('/', (req, res) => {
 
 // 瀏覽所有todo
 app.get('/todos', (req, res) => {
-    Todo.find((err, todos) => {
+    Todo.find()
+    .sort({name: 'desc'})
+    .exec((err, todos) => {
         if (err) return console.error(err)
         return res.render('index', {todos: todos})
     })
@@ -87,10 +93,15 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 // POST修改todo
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
     Todo.findById(req.params.id,(err, todo) => {
         if (err) return console.error(err)
         todo.name = req.body.name
+        if (req.body.done) {
+            todo.done = true
+        } else {
+            todo.done = false
+        }
         todo.save(err, () => {
             if (err) return console.error(err)
             return res.redirect('/todos/' + todo.id)
@@ -99,7 +110,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // POST刪除todo
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id/delete', (req, res) => {
     Todo.findById(req.params.id, (err, todo) => {
         if (err) return console.error(err)
         todo.remove(err, ()=> {
