@@ -11,7 +11,6 @@ const methodOverride = require('method-override')
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
 
-
 // 設定body-parser
 app.use(bodyParser.urlencoded({ extended: true }))
 
