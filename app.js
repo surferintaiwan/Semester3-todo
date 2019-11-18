@@ -39,6 +39,38 @@ app.use(methodOverride('_method'))
 // 路由
 app.use('/', require('./routes/homes.js'))
 app.use('/todos', require('./routes/todos.js'))
+app.use('/users', require('./routes/user.js'))
+
+/*
+let signInStatus = false
+*/
+/*
+app.get("/user-profile", function(req, res, next){
+    if (signInStatus === true) {
+        next('route')
+    } else {
+        console.log('You need to log in!')
+        next()
+    }}, function(req, res) {
+        console.log('You cannot read profile page!')
+})
+  
+app.get("/user-profile", function(req, res, next){
+  console.log('its your profile page!')
+})
+*/
+
+/*
+app.get("/user-profile", function(req, res, next){
+    if (signInStatus === true) {
+        console.log('its your profile page!')
+    } else {
+        console.log('You need to log in!')
+        console.log('You cannot read profile page!')
+    }
+})
+*/
+
 
 app.listen(port,()=>{
     console.log(`http://localhost:${port} is starting!`)
