@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+const session = require('express-session')
 
 
 // 設定handlebars
@@ -31,6 +32,13 @@ db.on('error', () => {
 db.once('open', () => {
     console.log('mondoDB connnected!')
 })
+
+// 設定express-session
+app.use(session({
+    secret: 'your secret key',
+    resave: false,
+    saveUninitialized: true
+}))
 
 // 設定method-override
 app.use(methodOverride('_method'))
