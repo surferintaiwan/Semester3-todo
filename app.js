@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const session = require('express-session')
+const passport = require('passport')
 
 
 // 設定handlebars
@@ -39,6 +40,18 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
+// 設定passport
+app.use(passport.initialize())
+app.use(passport.session())
+
+// 載入passport config(後面的passport代表把參數帶回去給passport.js使用)
+require('./config/passport.js')(passport)
+// 登入後可以取得使用者的資訊方便我們在 view 裡面直接使用
+app.use((req, res, next) => {
+    res.locals.user = req.user
+    next()
+})
 
 // 設定method-override
 app.use(methodOverride('_method'))

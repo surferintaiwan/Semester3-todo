@@ -1,12 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user.js')
+const passport = require('passport')
 
 router.get('/login', (req, res) => {
     res.render('login')
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/users/login'
+    })(req, res, next)
+    /*
     const {name, email, password, password2} = req.body
     User.findOne({email: email}).then(user => {
         if (user) {
@@ -28,6 +34,7 @@ router.post('/login', (req, res) => {
             .catch(err => console.log(err))
         }
     })
+    */
 })
 
 router.get('/register', (req, res) => {
