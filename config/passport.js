@@ -18,6 +18,7 @@ module.exports = passport => {
             })
         })
     )
+
     passport.serializeUser((user, done) => {
         done(null, user.id)
     })
@@ -26,4 +27,5 @@ module.exports = passport => {
         done(err, user)
       })
     })
+
 }
