@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/user.js')
 const passport = require('passport')
 
+//  登入
 router.get('/login', (req, res) => {
     res.render('login')
 })
@@ -12,10 +13,18 @@ router.post('/login', (req, res, next) => {
         successRedirect: '/',
         failureRedirect: '/users/login'
     })(req, res, next)
-    /*
+})
+
+// 註冊
+router.get('/register', (req, res) => {
+    res.render('register')
+})
+
+router.post('/register', (req, res) => {
     const {name, email, password, password2} = req.body
     User.findOne({email: email}).then(user => {
         if (user) {
+            // console.log('user already exists')
             res.render('register', {
                 name,
                 email,
@@ -34,15 +43,6 @@ router.post('/login', (req, res, next) => {
             .catch(err => console.log(err))
         }
     })
-    */
-})
-
-router.get('/register', (req, res) => {
-    res.render('register')
-})
-
-router.post('/register', (req, res) => {
-    
 })
 
 router.get('/logout', (req, res) => {
