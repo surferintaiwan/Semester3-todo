@@ -42,7 +42,11 @@ app.use(session({
 }))
 
 // 設定passport
-app.use(passport.initialize())
+app.use(passport.initialize(
+    {
+        userProperty: 'currentUser'
+    }
+))
 app.use(passport.session())
 
 // 載入passport config(後面的passport代表把參數帶回去給passport.js使用)
@@ -50,10 +54,9 @@ require('./config/passport.js')(passport)
 // 登入後可以取得使用者的資訊方便我們在 view 裡面直接使用
 app.use((req, res, next) => {
     res.locals.user = req.user
+    res.locals.isAuthenticated = req.isAuthenticated()
     next()
 })
-
-
 
 // 設定method-override
 app.use(methodOverride('_method'))
@@ -62,37 +65,6 @@ app.use(methodOverride('_method'))
 app.use('/', require('./routes/homes.js'))
 app.use('/todos', require('./routes/todos.js'))
 app.use('/users', require('./routes/user.js'))
-
-/*
-let signInStatus = false
-*/
-/*
-app.get("/user-profile", function(req, res, next){
-    if (signInStatus === true) {
-        next('route')
-    } else {
-        console.log('You need to log in!')
-        next()
-    }}, function(req, res) {
-        console.log('You cannot read profile page!')
-})
-  
-app.get("/user-profile", function(req, res, next){
-  console.log('its your profile page!')
-})
-*/
-
-/*
-app.get("/user-profile", function(req, res, next){
-    if (signInStatus === true) {
-        console.log('its your profile page!')
-    } else {
-        console.log('You need to log in!')
-        console.log('You cannot read profile page!')
-    }
-})
-*/
-
 
 app.listen(port,()=>{
     console.log(`http://localhost:${port} is starting!`)
