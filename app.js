@@ -42,11 +42,7 @@ app.use(session({
 }))
 
 // 設定passport
-app.use(passport.initialize(
-    {
-        userProperty: 'currentUser'
-    }
-))
+app.use(passport.initialize())
 app.use(passport.session())
 
 // 載入passport config(後面的passport代表把參數帶回去給passport.js使用)

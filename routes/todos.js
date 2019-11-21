@@ -5,7 +5,7 @@ const {authenticated} = require('../config/auth.js')
 
 // 瀏覽所有todo
 router.get('/', authenticated, (req, res) => {
-    Todo.find({userId: req.user._id})
+    Todo.find({userId: req.user.id})
     .sort({name: 'desc'})
     .exec((err, todos) => {
         if (err) return console.error(err)
