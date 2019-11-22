@@ -8,6 +8,10 @@ const methodOverride = require('method-override')
 const session = require('express-session')
 const passport = require('passport')
 
+// 判別開發環境
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 
 // 設定handlebars
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
@@ -61,6 +65,7 @@ app.use(methodOverride('_method'))
 app.use('/', require('./routes/homes.js'))
 app.use('/todos', require('./routes/todos.js'))
 app.use('/users', require('./routes/user.js'))
+app.use('/auth', require('./routes/auths.js'))
 
 app.listen(port,()=>{
     console.log(`http://localhost:${port} is starting!`)
