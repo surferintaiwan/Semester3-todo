@@ -38,7 +38,6 @@ router.get('/new', authenticated, (req, res) => {
 // 顯示不同todo的詳細頁面
 router.get('/:id', authenticated, (req, res) => {
     Todo.findOne({_id: req.params.id, userId: req.user._id}, (err,todo) => {
-        console.log(todo)
         return res.render('detail', {todo: todo})
     })
 })

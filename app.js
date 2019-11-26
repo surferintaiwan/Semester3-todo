@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const session = require('express-session')
 const passport = require('passport')
+const flash = require('connect-flash')
 
 // 判別開發環境
 if (process.env.NODE_ENV !== 'production') {
@@ -22,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // 連線到資料庫伺服器
 // 加上 { useNewUrlParser: true }
-mongoose.connect('mongodb://localhost/todo', { useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/todo', { useUnifiedTopology: true })
 
 // mongoose 連線後透過 mongoose.connection 拿到 Connection 的物件
 const db = mongoose.connection
@@ -45,6 +46,9 @@ app.use(session({
     saveUninitialized: true
 }))
 
+// 使用connect flash
+app.use(flash())
+
 // 設定passport
 app.use(passport.initialize())
 app.use(passport.session())
@@ -55,6 +59,8 @@ require('./config/passport.js')(passport)
 app.use((req, res, next) => {
     res.locals.user = req.user
     res.locals.isAuthenticated = req.isAuthenticated()
+    res.locals.success_msg = req.flash('success_msg')
+    res.locals.warning_msg = req.flash('warning_msg')
     next()
 })
 
@@ -67,6 +73,6 @@ app.use('/todos', require('./routes/todos.js'))
 app.use('/users', require('./routes/user.js'))
 app.use('/auth', require('./routes/auths.js'))
 
-app.listen(port,()=>{
+app.listen(process.env.PORT || port,()=>{
     console.log(`http://localhost:${port} is starting!`)
 })
